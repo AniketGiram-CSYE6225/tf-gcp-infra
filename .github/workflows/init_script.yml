@@ -10,5 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
+      - name: initialize terraform
+        run: terraform init
       - name: validate terraform template
         run : terraform validate
