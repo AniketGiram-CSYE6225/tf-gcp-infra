@@ -1,0 +1,13 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  CI_WorkFlow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: validate terraform template
+        run : terraform validate
