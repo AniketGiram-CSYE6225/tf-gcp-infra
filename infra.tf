@@ -1,41 +1,37 @@
 provider "google" {
-  project = "nscc-414218"
-  region  = "us-east1"
-}
-
-resource "random_id" "network_suffix" {
-  byte_length = 2
+  project = var.project_name
+  region  = var.region
 }
 
 resource "google_compute_network" "nscc_vpc" {
-  name                            = "nscc-${random_id.network_suffix.hex}"
+  name                            = var.network_name
   auto_create_subnetworks         = false
   routing_mode                    = "REGIONAL"
   delete_default_routes_on_create = true
 }
 
 resource "google_compute_subnetwork" "webapp" {
-  name                     = "webapp"
-  ip_cidr_range            = "255.0.0.0/24"
-  region                   = "us-east1"
+  name                     = var.webapp_subnet
+  ip_cidr_range            = var.webapp_ip_range
+  region                   = var.region
   network                  = google_compute_network.nscc_vpc.id
   depends_on               = [google_compute_network.nscc_vpc]
   private_ip_google_access = true
 }
 
 resource "google_compute_subnetwork" "db" {
-  name                     = "db"
-  ip_cidr_range            = "255.0.1.0/24"
-  region                   = "us-east1"
+  name                     = var.db_subnet
+  ip_cidr_range            = var.db_ip_range
+  region                   = var.region
   network                  = google_compute_network.nscc_vpc.id
   depends_on               = [google_compute_network.nscc_vpc]
   private_ip_google_access = true
 }
 
 resource "google_compute_route" "webapp_route" {
-  name             = "webapp-route"
-  dest_range       = "0.0.0.0/0"
+  name             = var.route_name
+  dest_range       = var.default_gateway_ip_range
   network          = google_compute_network.nscc_vpc.id
   next_hop_gateway = "default-internet-gateway"
-  tags             = ["webapp"]
+  tags             = [google_compute_subnetwork.webapp.name]
 }
