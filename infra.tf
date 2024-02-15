@@ -3,8 +3,12 @@ provider "google" {
   region  = "us-east1"
 }
 
+resource "random_id" "network_suffix" {
+  byte_length = 2
+}
+
 resource "google_compute_network" "nscc_vpc" {
-  name                            = "nscc"
+  name                            = "nscc-${random_id.network_suffix.hex}"
   auto_create_subnetworks         = false
   routing_mode                    = "REGIONAL"
   delete_default_routes_on_create = true
@@ -17,7 +21,6 @@ resource "google_compute_subnetwork" "webapp" {
   network                  = google_compute_network.nscc_vpc.id
   depends_on               = [google_compute_network.nscc_vpc]
   private_ip_google_access = true
-  purpose                  = "PUBLIC"
 }
 
 resource "google_compute_subnetwork" "db" {
@@ -27,7 +30,6 @@ resource "google_compute_subnetwork" "db" {
   network                  = google_compute_network.nscc_vpc.id
   depends_on               = [google_compute_network.nscc_vpc]
   private_ip_google_access = true
-  purpose                  = "PRIVATE"
 }
 
 resource "google_compute_route" "webapp_route" {
