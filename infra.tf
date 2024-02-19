@@ -3,7 +3,7 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_compute_network" "nscc_vpc" {
+resourcea "google_compute_network" "nscc_vpc" {
   name                            = var.network_name
   auto_create_subnetworks         = false
   routing_mode                    = "REGIONAL"
