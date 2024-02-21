@@ -33,3 +33,27 @@ variable "route_name" {
 variable "default_gateway_ip_range" {
   type = string
 }
+
+variable "routing_mode" {
+  type = string
+}
+
+variable "next_hop_gateway" {
+  type = string
+}
+
+variable "compute_instance_name" {
+  type = string
+}
+
+variable "compute_image" {
+  type = string
+}
+
+variable "compute_machine_type" {
+  type = string
+}
+
+variable "compute_zone" {
+  type = string
+}
