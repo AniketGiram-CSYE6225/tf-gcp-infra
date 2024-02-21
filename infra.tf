@@ -6,7 +6,7 @@ provider "google" {
 resource "google_compute_network" "nscc_vpc" {
   name                            = var.network_name
   auto_create_subnetworks         = false
-  routing_mode                    = "REGIONAL"
+  routing_mode                    = var.routing_mode
   delete_default_routes_on_create = true
 }
 
@@ -32,6 +32,35 @@ resource "google_compute_route" "webapp_route" {
   name             = var.route_name
   dest_range       = var.default_gateway_ip_range
   network          = google_compute_network.nscc_vpc.id
-  next_hop_gateway = "default-internet-gateway"
+  next_hop_gateway = var.next_hop_gateway
   tags             = [google_compute_subnetwork.webapp.name]
+}
+
+
+resource "google_compute_instance" "compute_instance" {
+  name = var.compute_instance_name
+  boot_disk {
+    initialize_params {
+      image = var.compute_image
+      size  = 100
+    }
+  }
+  tags         = [google_compute_subnetwork.webapp.name]
+  machine_type = var.compute_machine_type
+  zone         = var.compute_zone
+  network_interface {
+    network    = google_compute_network.nscc_vpc.name
+    subnetwork = google_compute_subnetwork.webapp.name
+    access_config {}
+  }
+}
+
+resource "google_compute_firewall" "compute_firewall" {
+  name    = "test-firewall"
+  network = google_compute_network.nscc_vpc.name
+  source_ranges = [var.default_gateway_ip_range]
+  allow {
+    protocol = "tcp"
+    ports    = ["8080"]
+  }
 }
