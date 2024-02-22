@@ -74,6 +74,10 @@ variable "firewall_protocol_tcp" {
   type = string
 }
 
+variable "compute_network_tier" {
+  type = string
+}
+
 variable "firewall_allowed_ports" {
   type = list(string)
 }

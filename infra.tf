@@ -52,7 +52,9 @@ resource "google_compute_instance" "compute_instance" {
   network_interface {
     network    = google_compute_network.nscc_vpc.name
     subnetwork = google_compute_subnetwork.webapp.name
-    access_config {}
+    access_config {
+      network_tier = var.compute_network_tier
+    }
   }
 }
 
