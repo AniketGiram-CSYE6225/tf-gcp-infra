@@ -56,6 +56,7 @@ resource "google_compute_instance" "compute_instance" {
       network_tier = var.compute_network_tier
     }
   }
+  depends_on = [ google_compute_network.nscc_vpc, google_compute_subnetwork.webapp ]
 }
 
 resource "google_compute_firewall" "compute_firewall" {
@@ -66,4 +67,5 @@ resource "google_compute_firewall" "compute_firewall" {
     protocol = var.firewall_protocol_tcp
     ports    = var.firewall_allowed_ports
   }
+  depends_on = [ google_compute_network.nscc_vpc, google_compute_subnetwork.webapp ]
 }
