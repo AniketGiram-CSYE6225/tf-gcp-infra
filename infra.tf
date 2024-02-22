@@ -42,7 +42,8 @@ resource "google_compute_instance" "compute_instance" {
   boot_disk {
     initialize_params {
       image = var.compute_image
-      size  = 100
+      type  = var.compute_disk_type
+      size  = var.compute_disk_size
     }
   }
   tags         = [google_compute_subnetwork.webapp.name]
@@ -56,11 +57,11 @@ resource "google_compute_instance" "compute_instance" {
 }
 
 resource "google_compute_firewall" "compute_firewall" {
-  name    = "test-firewall"
-  network = google_compute_network.nscc_vpc.name
+  name          = var.firewall_name
+  network       = google_compute_network.nscc_vpc.name
   source_ranges = [var.default_gateway_ip_range]
   allow {
-    protocol = "tcp"
-    ports    = ["8080"]
+    protocol = var.firewall_protocol_tcp
+    ports    = var.firewall_allowed_ports
   }
 }
