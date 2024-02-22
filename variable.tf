@@ -50,10 +50,30 @@ variable "compute_image" {
   type = string
 }
 
+variable "compute_disk_type" {
+  type = string
+}
+
+variable "compute_disk_size" {
+  type = number
+}
+
 variable "compute_machine_type" {
   type = string
 }
 
 variable "compute_zone" {
   type = string
+}
+
+variable "firewall_name" {
+  type = string
+}
+
+variable "firewall_protocol_tcp" {
+  type = string
+}
+
+variable "firewall_allowed_ports" {
+  type = list(string)
 }
