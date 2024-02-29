@@ -81,3 +81,35 @@ variable "compute_network_tier" {
 variable "firewall_allowed_ports" {
   type = list(string)
 }
+
+variable "sql_database_name" {
+  type = string
+}
+
+variable "sql_user_name" {
+  type = string
+}
+
+variable "database_version" {
+  type = string
+}
+
+variable "database_tier" {
+  type = string
+}
+
+variable "database_disk_size" {
+  type = number
+}
+
+variable "database_disk_type" {
+  type = string
+}
+
+variable "compute_address_type" {
+  type = string
+}
+
+variable "compute_address_ip" {
+  type = string
+}
