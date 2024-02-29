@@ -2,6 +2,8 @@ Enabled Google API
 
 `Compute Engine API`
 
+`Service Networking API`
+
 # Commands
 
 To create resource using this template you must have terraform installed 
