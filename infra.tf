@@ -1,5 +1,5 @@
 resource "random_id" "db_name_suffix" {
-  byte_length = 4
+  byte_length = var.random_id_length
 }
 
 resource "google_sql_database_instance" "nscc-db-instance" {
@@ -35,9 +35,9 @@ resource "google_sql_database" "nscc-database" {
 }
 
 resource "random_password" "nscc-db-password" {
-  length           = 16
+  length           = var.password_length
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = var.password_special_char
 }
 
 resource "google_sql_user" "nscc-db-users" {
