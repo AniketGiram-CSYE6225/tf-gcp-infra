@@ -113,3 +113,15 @@ variable "compute_address_type" {
 variable "compute_address_ip" {
   type = string
 }
+
+variable "password_length" {
+  type = number
+}
+
+variable "password_special_char" {
+  type = string
+}
+
+variable "random_id_length" {
+  type = number
+}
