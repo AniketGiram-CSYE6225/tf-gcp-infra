@@ -4,6 +4,10 @@ Enabled Google API
 
 `Service Networking API`
 
+`Cloud DNS API`
+
+`Cloud Logging API`
+
 # Commands
 
 To create resource using this template you must have terraform installed 
