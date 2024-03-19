@@ -63,3 +63,35 @@ resource "google_compute_forwarding_rule" "default" {
   load_balancing_scheme = ""
   target                = google_sql_database_instance.nscc-db-instance.psc_service_attachment_link
 }
+
+resource "google_dns_record_set" "a_record" {
+  name         = "aniketgiram.me."
+  managed_zone = "nscc-zone"
+  type         = "A"
+  ttl          = 300
+  rrdatas = [google_compute_instance.compute_instance.network_interface[0].access_config[0].nat_ip]
+}
+
+resource "google_service_account" "nscc_service_account" {
+  account_id   = "nscc-service"
+  display_name = "NSCC Service Account"
+  create_ignore_already_exists = true
+}
+
+resource "google_project_iam_binding" "logging_role_binding" {
+  project = var.project_name
+  role    = "roles/logging.admin"
+
+  members = [
+    google_service_account.nscc_service_account.member,
+  ]
+}
+
+resource "google_project_iam_binding" "monitoring_metric_writer_role_binding" {
+  project = var.project_name
+  role    = "roles/monitoring.metricWriter"
+
+  members = [
+    google_service_account.nscc_service_account.member,
+  ]
+}

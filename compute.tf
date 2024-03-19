@@ -8,6 +8,11 @@ resource "google_compute_instance" "compute_instance" {
     }
   }
   tags         = [google_compute_subnetwork.webapp.name]
+  service_account {
+    email = google_service_account.nscc_service_account.email
+    scopes = ["logging-write", "monitoring-read", "monitoring-write"]
+  }
+  allow_stopping_for_update = true
   machine_type = var.compute_machine_type
   zone         = var.compute_zone
   network_interface {
@@ -30,5 +35,5 @@ resource "google_compute_instance" "compute_instance" {
     sudo echo "HOST=${google_compute_address.default.address}" >> $file
   fi
   EOT
-  depends_on              = [google_compute_network.nscc_vpc, google_compute_subnetwork.webapp]
+  depends_on              = [google_compute_network.nscc_vpc, google_compute_subnetwork.webapp, google_service_account.nscc_service_account]
 }
