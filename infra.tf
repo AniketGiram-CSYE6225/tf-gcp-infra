@@ -65,22 +65,22 @@ resource "google_compute_forwarding_rule" "default" {
 }
 
 resource "google_dns_record_set" "a_record" {
-  name         = "aniketgiram.me."
-  managed_zone = "nscc-zone"
-  type         = "A"
-  ttl          = 300
-  rrdatas = [google_compute_instance.compute_instance.network_interface[0].access_config[0].nat_ip]
+  name         = var.domain_name
+  managed_zone = var.managed_zone
+  type         = var.record_type
+  ttl          = var.dns_ttl
+  rrdatas      = [google_compute_instance.compute_instance.network_interface[0].access_config[0].nat_ip]
 }
 
 resource "google_service_account" "nscc_service_account" {
-  account_id   = "nscc-service"
-  display_name = "NSCC Service Account"
+  account_id                   = var.service_account_id
+  display_name                 = var.service_account_displayname
   create_ignore_already_exists = true
 }
 
 resource "google_project_iam_binding" "logging_role_binding" {
   project = var.project_name
-  role    = "roles/logging.admin"
+  role    = var.logging_role
 
   members = [
     google_service_account.nscc_service_account.member,
@@ -89,7 +89,7 @@ resource "google_project_iam_binding" "logging_role_binding" {
 
 resource "google_project_iam_binding" "monitoring_metric_writer_role_binding" {
   project = var.project_name
-  role    = "roles/monitoring.metricWriter"
+  role    = var.monitoring_role
 
   members = [
     google_service_account.nscc_service_account.member,

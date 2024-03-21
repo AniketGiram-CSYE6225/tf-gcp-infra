@@ -125,3 +125,39 @@ variable "password_special_char" {
 variable "random_id_length" {
   type = number
 }
+
+variable "logging_role" {
+  type = string
+}
+
+variable "monitoring_role" {
+  type = string
+}
+
+variable "service_account_id" {
+  type = string
+}
+
+variable "service_account_displayname" {
+  type = string
+}
+
+variable "domain_name" {
+  type = string
+}
+
+variable "record_type" {
+  type = string
+}
+
+variable "managed_zone" {
+  type = string
+}
+
+variable "dns_ttl" {
+  type = number
+}
+
+variable "service_account_scopes" {
+  type = list(string)
+}
