@@ -7,14 +7,14 @@ resource "google_compute_instance" "compute_instance" {
       size  = var.compute_disk_size
     }
   }
-  tags         = [google_compute_subnetwork.webapp.name]
+  tags = [google_compute_subnetwork.webapp.name]
   service_account {
-    email = google_service_account.nscc_service_account.email
-    scopes = ["logging-write", "monitoring-read", "monitoring-write"]
+    email  = google_service_account.nscc_service_account.email
+    scopes = var.service_account_scopes
   }
   allow_stopping_for_update = true
-  machine_type = var.compute_machine_type
-  zone         = var.compute_zone
+  machine_type              = var.compute_machine_type
+  zone                      = var.compute_zone
   network_interface {
     network    = google_compute_network.nscc_vpc.name
     subnetwork = google_compute_subnetwork.webapp.name
