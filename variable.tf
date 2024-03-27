@@ -161,3 +161,23 @@ variable "dns_ttl" {
 variable "service_account_scopes" {
   type = list(string)
 }
+
+variable "cloud_function_name" {
+  type = string
+}
+
+variable "runtime" {
+  type = string
+}
+
+variable "entry_point" {
+  type = string
+}
+
+variable "repo_name" {
+  type = string
+}
+
+variable "branch_name" {
+  type = string
+}
