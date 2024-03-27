@@ -33,6 +33,8 @@ resource "google_compute_instance" "compute_instance" {
     sudo echo "DB_USERNAME=${google_sql_user.nscc-db-users.name}" >> $file
     sudo echo "DB_PASSWORD=${random_password.nscc-db-password.result}" >> $file
     sudo echo "HOST=${google_compute_address.default.address}" >> $file
+    sudo echo "GCP_PROJECT_ID=${var.project_name}" >> $file
+    sudo echo "PUB_SUB_TOPIC_NAME=${google_pubsub_topic.verifyUser.name}" >> $file
   fi
   EOT
   depends_on              = [google_compute_network.nscc_vpc, google_compute_subnetwork.webapp, google_service_account.nscc_service_account]

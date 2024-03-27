@@ -95,3 +95,12 @@ resource "google_project_iam_binding" "monitoring_metric_writer_role_binding" {
     google_service_account.nscc_service_account.member,
   ]
 }
+
+resource "google_project_iam_binding" "vm_pubsub_publisher" {
+  project = var.project_name
+  role    = "roles/pubsub.publisher"
+
+  members = [
+    google_service_account.nscc_service_account.member,
+  ]
+}
