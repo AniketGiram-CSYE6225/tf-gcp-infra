@@ -181,3 +181,107 @@ variable "repo_name" {
 variable "branch_name" {
   type = string
 }
+
+variable "compute_address_purpose" {
+  type = string
+}
+
+variable "compute_address_name" {
+  type = string
+}
+
+variable "compute_address_ip_version" {
+  type = string
+}
+
+variable "pub_sub_role" {
+  type = string
+}
+
+variable "pub_sub_schema_name" {
+  type = string
+}
+
+variable "pub_sub_user_schema" {
+  type = string
+}
+
+variable "pub_sub_schema_type" {
+  type = string
+}
+
+variable "pub_sub_topic_name" {
+  type = string
+}
+
+variable "pub_sub_schema_setting_schema" {
+  type = string
+}
+
+variable "pub_sub_schema_encoding" {
+  type = string
+}
+
+variable "pub_sub_message_retation_duration" {
+  type = string
+}
+
+variable "mailgub_api_key" {
+  type = string
+}
+
+variable "email_link_expiry_duration" {
+  type = number
+}
+
+variable "cloud_fn_event_trigger_type" {
+  type = string
+}
+
+variable "cloud_fn_ingress_setting" {
+  type = string
+}
+
+variable "cloud_fn_vpc_peering_egress_setting" {
+  type = string
+}
+
+variable "cloud_fn_max_count" {
+  type = number
+}
+
+variable "cloud_fn_timeout_setting" {
+  type = number
+}
+
+variable "cloud_fn_available_memory" {
+  type = string
+}
+
+variable "pub_sub_topic_path_name" {
+  type = string
+}
+
+variable "pub_sub_retry_policy" {
+  type = string
+}
+
+variable "vpc_connector_name" {
+  type = string
+}
+
+variable "vpc_connector_machine_type" {
+  type = string
+}
+
+variable "vpc_connector_ip_cidr" {
+  type = string
+}
+
+variable "vpc_connector_max_instance_count" {
+  type = number
+}
+
+variable "vpc_connector_min_instance_count" {
+  type = number
+}

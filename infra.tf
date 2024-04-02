@@ -14,18 +14,37 @@ resource "google_sql_database_instance" "nscc-db-instance" {
     disk_type                   = var.database_disk_type
     disk_size                   = var.database_disk_size
     ip_configuration {
-      ipv4_enabled = false
-      psc_config {
-        psc_enabled               = true
-        allowed_consumer_projects = [var.project_name]
-      }
+      ipv4_enabled                                  = false
+      private_network                               = google_compute_network.nscc_vpc.id
+      enable_private_path_for_google_cloud_services = true
     }
     backup_configuration {
       enabled            = true
       binary_log_enabled = true
     }
+    location_preference {
+      zone = var.compute_zone
+    }
   }
-  depends_on = [google_compute_network.nscc_vpc]
+  depends_on = [google_compute_network.nscc_vpc, google_service_networking_connection.private_vpc_connection]
+}
+
+resource "google_compute_global_address" "private_ip_address" {
+  name          = var.compute_address_name
+  purpose       = var.compute_address_purpose
+  address_type  = var.compute_address_type
+  prefix_length = 16
+  ip_version    = var.compute_address_ip_version
+  network       = google_compute_network.nscc_vpc.name
+
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  network                 = google_compute_network.nscc_vpc.name
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
+  depends_on              = [google_compute_global_address.private_ip_address]
+  deletion_policy         = "ABANDON"
 }
 
 resource "google_sql_database" "nscc-database" {
@@ -45,23 +64,6 @@ resource "google_sql_user" "nscc-db-users" {
   instance   = google_sql_database_instance.nscc-db-instance.name
   password   = random_password.nscc-db-password.result
   depends_on = [google_sql_database_instance.nscc-db-instance]
-}
-
-resource "google_compute_address" "default" {
-  name         = "psc-compute-address-${google_sql_database_instance.nscc-db-instance.name}"
-  region       = var.region
-  address_type = var.compute_address_type
-  subnetwork   = google_compute_subnetwork.webapp.name
-  address      = var.compute_address_ip
-}
-
-resource "google_compute_forwarding_rule" "default" {
-  name                  = "psc-forwarding-rule-${google_sql_database_instance.nscc-db-instance.name}"
-  region                = var.region
-  network               = google_compute_network.nscc_vpc.self_link
-  ip_address            = google_compute_address.default.self_link
-  load_balancing_scheme = ""
-  target                = google_sql_database_instance.nscc-db-instance.psc_service_attachment_link
 }
 
 resource "google_dns_record_set" "a_record" {
@@ -98,7 +100,7 @@ resource "google_project_iam_binding" "monitoring_metric_writer_role_binding" {
 
 resource "google_project_iam_binding" "vm_pubsub_publisher" {
   project = var.project_name
-  role    = "roles/pubsub.publisher"
+  role    = var.pub_sub_role
 
   members = [
     google_service_account.nscc_service_account.member,
