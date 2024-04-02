@@ -32,7 +32,7 @@ resource "google_compute_instance" "compute_instance" {
     sudo echo "DB_NAME=${google_sql_database.nscc-database.name}" >> $file
     sudo echo "DB_USERNAME=${google_sql_user.nscc-db-users.name}" >> $file
     sudo echo "DB_PASSWORD=${random_password.nscc-db-password.result}" >> $file
-    sudo echo "HOST=${google_compute_address.default.address}" >> $file
+    sudo echo "HOST=${google_sql_database_instance.nscc-db-instance.private_ip_address}" >> $file
     sudo echo "GCP_PROJECT_ID=${var.project_name}" >> $file
     sudo echo "PUB_SUB_TOPIC_NAME=${google_pubsub_topic.verifyUser.name}" >> $file
   fi

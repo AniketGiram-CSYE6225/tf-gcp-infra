@@ -1,34 +1,15 @@
 resource "google_pubsub_schema" "UserSchema" {
-  name       = "UserSchema"
-  type       = "AVRO"
-  definition = <<JSON
-{
-  "type": "record",
-  "name": "Avro",
-  "fields": [
-    {
-      "name": "userId",
-      "type": "string"
-    },
-    {
-      "name": "username",
-      "type": "string"
-    },
-    {
-      "name": "firstName",
-      "type": "string"
-    }
-  ]
-}
-JSON
+  name       = var.pub_sub_schema_name
+  type       = var.pub_sub_schema_type
+  definition = var.pub_sub_user_schema
 }
 
 resource "google_pubsub_topic" "verifyUser" {
-  name       = "verify_email"
+  name       = var.pub_sub_topic_name
   depends_on = [google_pubsub_schema.UserSchema]
   schema_settings {
-    schema   = "projects/nscc-prod-2404/schemas/UserSchema"
-    encoding = "JSON"
+    schema   = var.pub_sub_schema_setting_schema
+    encoding = var.pub_sub_schema_encoding
   }
-  message_retention_duration = "604800s"
+  message_retention_duration = var.pub_sub_message_retation_duration
 }
