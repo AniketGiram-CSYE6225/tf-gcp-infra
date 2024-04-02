@@ -218,7 +218,7 @@ variable "pub_sub_schema_setting_schema" {
   type = string
 }
 
-variable "pub_sub_schema_encoding" {
+variable "pub_sub_schema_encoding_type" {
   type = string
 }
 
