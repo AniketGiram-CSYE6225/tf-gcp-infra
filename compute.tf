@@ -1,17 +1,17 @@
 resource "google_compute_region_instance_template" "compute_instance_template" {
-  name         = "appserver-template"
+  name         = var.compute_instance_template_name
   tags         = [google_compute_subnetwork.webapp.name]
   region       = var.region
   machine_type = var.compute_machine_type
 
 
   scheduling {
-    automatic_restart   = true
-    on_host_maintenance = "MIGRATE"
+    automatic_restart   = var.compute_instance_template_scheduling_auto_start
+    on_host_maintenance = var.compute_instance_template_scheduling_on_host_maintenance
   }
 
   disk {
-    disk_name    = "compute-instance-template-disk"
+    disk_name    = var.compute_instance_template_disk_name
     source_image = var.compute_image
     auto_delete  = true
     boot         = true
@@ -44,47 +44,47 @@ resource "google_compute_region_instance_template" "compute_instance_template" {
 }
 
 resource "google_compute_region_instance_group_manager" "compute_instance_group_manager" {
-  name               = "compute-instance-group-manager"
-  base_instance_name = "webapp-manager"
+  name               = var.compute_instance_group_manager_name
+  base_instance_name = var.compute_instance_group_manager_base_instance_name
   auto_healing_policies {
     health_check      = google_compute_region_health_check.autohealing.id
-    initial_delay_sec = 300
+    initial_delay_sec = var.compute_instance_group_manager_init_delay_sec
   }
   named_port {
-    name = "http"
-    port = 8080
+    name = var.compute_instance_group_manager_named_port_name
+    port = var.compute_instance_group_manager_named_port_port
   }
-  target_size = 2
+  target_size = var.compute_instance_group_manager_target_size
   version {
     instance_template = google_compute_region_instance_template.compute_instance_template.id
   }
 }
 
 resource "google_compute_region_health_check" "autohealing" {
-  name                = "autohealing-health-check"
-  check_interval_sec  = 5
-  timeout_sec         = 5
-  healthy_threshold   = 2
-  unhealthy_threshold = 10
+  name                = var.load_balancer_health_check_name
+  check_interval_sec  = var.load_balancer_health_check_check_interval_sec
+  timeout_sec         = var.load_balancer_health_check_timeout_sec
+  healthy_threshold   = var.load_balancer_health_check_healthy_threshold
+  unhealthy_threshold = var.load_balancer_health_check_unhealthy_threshold
   region              = var.region
   http_health_check {
-    request_path = "/healthz"
-    port         = "8080"
+    request_path = var.load_balancer_health_check_request_path
+    port         = var.compute_instance_group_manager_named_port_port
   }
 }
 
 resource "google_compute_region_autoscaler" "compute_auto_scaler" {
-  name   = "my-region-autoscaler"
+  name   = var.compute_auto_scaler_name
   region = var.region
   target = google_compute_region_instance_group_manager.compute_instance_group_manager.id
 
   autoscaling_policy {
-    max_replicas    = 5
-    min_replicas    = 2
-    cooldown_period = 60
+    max_replicas    = var.compute_auto_scaler_autoscaling_policy_max_replicas
+    min_replicas    = var.compute_auto_scaler_autoscaling_policy_min_replicas
+    cooldown_period = var.compute_auto_scaler_autoscaling_policy_cooldown_period
 
     cpu_utilization {
-      target = 0.5
+      target = var.compute_auto_scaler_autoscaling_policy_cpu_target
     }
   }
 }

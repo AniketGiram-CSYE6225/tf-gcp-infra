@@ -11,13 +11,13 @@ resource "google_compute_firewall" "compute_firewall" {
 }
 
 resource "google_compute_firewall" "default" {
-  name = "fw-allow-health-check"
+  name = var.health_check_firewall_name
   allow {
-    protocol = "tcp"
+    protocol = var.firewall_protocol_tcp
   }
-  direction     = "INGRESS"
+  direction     = var.health_check_firewall_direction
   network       = google_compute_network.nscc_vpc.id
-  priority      = 1000
-  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
-  target_tags   = ["load-balanced-backend"]
+  priority      = var.health_check_firewall_priority
+  source_ranges = var.health_check_firewall_source_ranges
+  target_tags   = var.load_balancer_tag
 }
