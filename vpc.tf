@@ -23,6 +23,15 @@ resource "google_compute_subnetwork" "db" {
   private_ip_google_access = true
 }
 
+resource "google_compute_subnetwork" "proxy_only" {
+  name          = "proxy-only-subnet"
+  ip_cidr_range = "10.129.0.0/23"
+  network       = google_compute_network.nscc_vpc.id
+  purpose       = "REGIONAL_MANAGED_PROXY"
+  region        = var.region
+  role          = "ACTIVE"
+}
+
 resource "google_compute_route" "webapp_route" {
   name             = var.route_name
   dest_range       = var.default_gateway_ip_range
