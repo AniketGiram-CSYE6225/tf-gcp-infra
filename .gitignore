@@ -9,3 +9,4 @@
 .terraform.tfstate.lock.info
 *.tfvars
 certificate
+.DS_Store
