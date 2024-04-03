@@ -45,3 +45,14 @@ resource "google_compute_forwarding_rule" "default" {
   ip_address            = google_compute_address.default.id
   network_tier          = "STANDARD"
 }
+
+
+resource "google_compute_ssl_certificate" "default" {
+  name_prefix = "aniketgiram-ssl-certificate"
+  private_key = file("cert/aniketgiram.me.key")
+  certificate = file("cert/aniketgiram_me.crt")
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
