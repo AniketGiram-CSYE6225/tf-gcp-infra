@@ -19,3 +19,9 @@ resource "google_compute_region_backend_service" "default" {
     capacity_scaler = 1.0
   }
 }
+
+resource "google_compute_region_url_map" "default" {
+  name            = "regional-l7-xlb-map"
+  region          = var.region
+  default_service = google_compute_region_backend_service.default.id
+}
