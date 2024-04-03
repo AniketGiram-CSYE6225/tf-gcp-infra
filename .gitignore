@@ -8,5 +8,7 @@
 *.tfstate.backup
 .terraform.tfstate.lock.info
 *.tfvars
+
+#for certificate
 certificate
 .DS_Store
