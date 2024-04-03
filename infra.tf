@@ -71,7 +71,7 @@ resource "google_dns_record_set" "a_record" {
   managed_zone = var.managed_zone
   type         = var.record_type
   ttl          = var.dns_ttl
-  rrdatas = [google_compute_address.default.address]
+  rrdatas      = [google_compute_address.default.address]
 }
 
 resource "google_service_account" "nscc_service_account" {
