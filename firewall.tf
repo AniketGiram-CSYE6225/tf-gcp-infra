@@ -9,3 +9,15 @@ resource "google_compute_firewall" "compute_firewall" {
   target_tags = [google_compute_subnetwork.webapp.name]
   depends_on  = [google_compute_network.nscc_vpc, google_compute_subnetwork.webapp]
 }
+
+resource "google_compute_firewall" "default" {
+  name = "fw-allow-health-check"
+  allow {
+    protocol = "tcp"
+  }
+  direction     = "INGRESS"
+  network       = google_compute_network.nscc_vpc.id
+  priority      = 1000
+  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
+  target_tags   = ["load-balanced-backend"]
+}
