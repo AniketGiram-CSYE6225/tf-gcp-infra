@@ -8,3 +8,4 @@
 *.tfstate.backup
 .terraform.tfstate.lock.info
 *.tfvars
+certificate
