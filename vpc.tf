@@ -24,12 +24,12 @@ resource "google_compute_subnetwork" "db" {
 }
 
 resource "google_compute_subnetwork" "proxy_only" {
-  name          = "proxy-only-subnet"
-  ip_cidr_range = "10.129.0.0/23"
+  name          = var.load_balancer_proxy_name
+  ip_cidr_range = var.load_balancer_ip_cidr
   network       = google_compute_network.nscc_vpc.id
-  purpose       = "REGIONAL_MANAGED_PROXY"
+  purpose       = var.load_balancer_purpose
   region        = var.region
-  role          = "ACTIVE"
+  role          = var.load_balancer_role
 }
 
 resource "google_compute_route" "webapp_route" {
