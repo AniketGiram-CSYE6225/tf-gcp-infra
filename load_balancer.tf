@@ -25,3 +25,23 @@ resource "google_compute_region_url_map" "default" {
   region          = var.region
   default_service = google_compute_region_backend_service.default.id
 }
+
+resource "google_compute_region_target_http_proxy" "default" {
+  name    = "l7-xlb-proxy"
+  region  = var.region
+  url_map = google_compute_region_url_map.default.id
+}
+
+resource "google_compute_forwarding_rule" "default" {
+  name       = "l7-xlb-forwarding-rule"
+  depends_on = [google_compute_subnetwork.proxy_only]
+  region     = var.region
+
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  port_range            = "8080"
+  target                = google_compute_region_target_http_proxy.default.id
+  network               = google_compute_network.nscc_vpc.id
+  ip_address            = google_compute_address.default.id
+  network_tier          = "STANDARD"
+}
