@@ -477,3 +477,7 @@ variable "ssl_cert_cert_path" {
 variable "google_compute_forwarding_rule_ip_protocol" {
   type = string
 }
+
+variable "load_balancer_front_end_port" {
+  type = number
+}
