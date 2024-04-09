@@ -40,7 +40,7 @@ resource "google_compute_forwarding_rule" "default" {
 
   ip_protocol           = var.google_compute_forwarding_rule_ip_protocol
   load_balancing_scheme = var.google_compute_forwarding_load_balancing_scheme
-  port_range            = var.compute_instance_group_manager_named_port_port
+  port_range            = var.load_balancer_front_end_port
   target                = google_compute_region_target_https_proxy.default.id
   network               = google_compute_network.nscc_vpc.id
   ip_address            = google_compute_address.default.id
