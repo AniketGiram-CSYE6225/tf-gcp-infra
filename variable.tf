@@ -481,3 +481,55 @@ variable "google_compute_forwarding_rule_ip_protocol" {
 variable "load_balancer_front_end_port" {
   type = number
 }
+
+variable "google_kms_key_ring_name" {
+  type = string
+}
+
+variable "google_kms_crypto_compute_key_name" {
+  type = string
+}
+
+variable "google_kms_crypto_sql_key_name" {
+  type = string
+}
+
+variable "google_kms_crypto_secret_manager_key_name" {
+  type = string
+}
+
+variable "google_kms_crypto_key_rotation_period" {
+  type = string
+}
+
+variable "google_kms_crypto_key_purpose" {
+  type = string
+}
+
+variable "google_kms_crypto_key_iam_binding_role" {
+  type = string
+}
+
+variable "google_secret_manager_secret_name" {
+  type = string
+}
+
+variable "instance-template-maintenance-policy-git" {
+  type = string
+}
+
+variable "instance-template-boot-disk-type-git" {
+  type = string
+}
+
+variable "instance-template-deletion-policy-git" {
+  type = string
+}
+
+variable "google_project_service_identity_sql_service" {
+  type = string
+}
+
+variable "google_project_service_identity_secret_manager_service" {
+  type = string
+}

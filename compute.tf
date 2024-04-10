@@ -1,5 +1,9 @@
+resource "random_id" "random_key_for_disk_name" {
+  byte_length = var.random_id_length
+}
+
 resource "google_compute_region_instance_template" "compute_instance_template" {
-  name         = var.compute_instance_template_name
+  name         = "${var.compute_instance_template_name}-${random_id.random_key_for_disk_name.hex}"
   tags         = [google_compute_subnetwork.webapp.name]
   region       = var.region
   machine_type = var.compute_machine_type
@@ -11,10 +15,13 @@ resource "google_compute_region_instance_template" "compute_instance_template" {
   }
 
   disk {
-    disk_name    = var.compute_instance_template_disk_name
+    disk_name    = "${var.compute_instance_template_disk_name}-${random_id.random_key_for_disk_name.hex}"
     source_image = var.compute_image
     auto_delete  = true
     boot         = true
+    disk_encryption_key {
+      kms_key_self_link = google_kms_crypto_key.compute_key.id
+    }
   }
 
   network_interface {
@@ -46,6 +53,7 @@ resource "google_compute_region_instance_template" "compute_instance_template" {
 resource "google_compute_region_instance_group_manager" "compute_instance_group_manager" {
   name               = var.compute_instance_group_manager_name
   base_instance_name = var.compute_instance_group_manager_base_instance_name
+  region             = var.region
   auto_healing_policies {
     health_check      = google_compute_region_health_check.autohealing.id
     initial_delay_sec = var.compute_instance_group_manager_init_delay_sec
