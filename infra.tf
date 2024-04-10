@@ -27,7 +27,7 @@ resource "google_sql_database_instance" "nscc-db-instance" {
     }
   }
   encryption_key_name = google_kms_crypto_key.sql_key.id
-  depends_on = [google_compute_network.nscc_vpc, google_service_networking_connection.private_vpc_connection]
+  depends_on          = [google_compute_network.nscc_vpc, google_service_networking_connection.private_vpc_connection]
 }
 
 resource "google_compute_global_address" "private_ip_address" {

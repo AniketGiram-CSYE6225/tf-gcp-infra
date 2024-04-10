@@ -14,19 +14,19 @@ resource "google_secret_manager_secret_version" "webapp_secret_version" {
   secret = google_secret_manager_secret.webapp_secret.id
 
   secret_data = jsonencode({
-    region = var.region,
-    tag = google_compute_subnetwork.webapp.name,
+    region       = var.region,
+    tag          = google_compute_subnetwork.webapp.name,
     machine_type = var.compute_machine_type
     network_interface = {
-      network = google_compute_network.nscc_vpc.name
+      network    = google_compute_network.nscc_vpc.name
       subnetwork = google_compute_subnetwork.webapp.name
     }
-    service_account = google_service_account.nscc_service_account.email
-    scope = join(",", var.service_account_scopes)
-    maintenance_policy = var.instance-template-maintenance-policy-git
-    image_project = var.project_name
-    boot_disk_type = var.instance-template-boot-disk-type-git
-    kms_key = google_kms_crypto_key.compute_key.id
+    service_account         = google_service_account.nscc_service_account.email
+    scope                   = join(",", var.service_account_scopes)
+    maintenance_policy      = var.instance-template-maintenance-policy-git
+    image_project           = var.project_name
+    boot_disk_type          = var.instance-template-boot-disk-type-git
+    kms_key                 = google_kms_crypto_key.compute_key.id
     metadata_startup_script = <<-METADATA
       #!/bin/bash
       file=/opt/webapp/.env

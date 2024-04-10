@@ -53,7 +53,7 @@ resource "google_compute_region_instance_template" "compute_instance_template" {
 resource "google_compute_region_instance_group_manager" "compute_instance_group_manager" {
   name               = var.compute_instance_group_manager_name
   base_instance_name = var.compute_instance_group_manager_base_instance_name
-  region = var.region
+  region             = var.region
   auto_healing_policies {
     health_check      = google_compute_region_health_check.autohealing.id
     initial_delay_sec = var.compute_instance_group_manager_init_delay_sec
