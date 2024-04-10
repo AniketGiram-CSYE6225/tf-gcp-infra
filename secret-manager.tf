@@ -1,10 +1,13 @@
 resource "google_secret_manager_secret" "webapp_secret" {
   secret_id = var.google_secret_manager_secret_name
-
+  
   replication {
     user_managed {
       replicas {
         location = var.region
+        customer_managed_encryption {
+          kms_key_name = google_kms_crypto_key.secret_manager_key.id
+        }
       }
     }
   }
